@@ -1,0 +1,96 @@
+Auth Routes:
+
+Method	Endpoint	        Purpose
+POST	/api/auth/register	Register new user
+POST	/api/auth/login	    Log in, return JWT token
+GET	    /api/auth/me	    Get current user profile (protected)
+POST	/api/auth/logout	(Optional) Log out (if using sessions)
+
+
+Task Routes (all protected):
+
+Method	Endpoint	    Purpose
+POST	/api/tasks	    Create new task
+GET	    /api/tasks	    Get all user’s tasks (with filters)
+GET	    /api/tasks/:id	Get single task by ID (if owner)
+PATCH	/api/tasks/:id	Update task (title, status, etc.)
+DELETE	/api/tasks/:id	Delete task
+
+----------------------------------------------------------------------------------------------------------------
+
+Core Functionalities:
+
+✅ User Authentication
+
+Use JWT (JSON Web Tokens) or sessions
+
+Protect all task routes so only logged-in users can access them
+
+✅ CRUD Operations
+
+Users can only modify their own tasks
+
+Validate input (e.g., task title required, due date is a valid date)
+
+✅ Filtering & Searching
+
+Query params: /tasks?status=pending or /tasks?priority=high
+
+Pagination: /tasks?page=2&limit=10
+
+Sort: /tasks?sortBy=createdAt:desc
+
+✅ Error Handling
+
+Standardized error responses (404, 400, 401, 500)
+
+Middleware to handle async errors
+
+✅ Optional Features
+
+Task Reminders: Email or push notification when deadlines are near
+
+Recurring Tasks: Set repeat intervals
+
+File Attachments: Allow attaching files or images to tasks
+
+Tags/Categories: Group tasks into categories or add custom tags
+
+----------------------------------------------------------------------------------------------------------------
+
+Tech Stack Suggestions:
+
+Node.js + Express → backend framework
+
+MongoDB (Mongoose) → database (easy for beginners), or PostgreSQL
+
+bcrypt → password hashing
+
+jsonwebtoken → JWT handling
+
+Multer (optional) → file uploads
+
+node-cron (optional) → scheduled jobs
+
+----------------------------------------------------------------------------------------------------------------
+
+Basic Middleware You’ll Need:
+
+Auth Middleware → check if user is logged in
+
+Error Middleware → catch and handle all errors
+
+Validation Middleware → validate inputs before processing
+
+----------------------------------------------------------------------------------------------------------------
+
+Example API Flow
+User registers → gets JWT token
+
+User logs in → gets JWT token
+
+User makes POST /tasks with token → creates a task
+
+User requests GET /tasks → sees all their tasks
+
+User updates/deletes task → only if it belongs to them
