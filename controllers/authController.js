@@ -1,4 +1,36 @@
-function registerController(req, res) {};
+const userModel = require('../models/user');
+
+async function registerController(req, res) {
+    try {
+        const {name, email, password} = req.body;
+
+        if(!name || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'These fields are required'
+            })
+        }
+
+        const newPerson = await userModel.create({
+            name,
+            email,
+            password
+        });
+
+        if(newPerson) {
+            res.status(200).json({
+                success: true,
+                message: 'User registered successfully!'
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            message: 'Internal Server Error'
+        })
+    }
+};
 
 function loginController(req, res) {};
 
