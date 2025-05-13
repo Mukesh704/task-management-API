@@ -11,6 +11,14 @@ async function registerController(req, res) {
             })
         }
 
+        const user = await userModel.findOne({email: email});
+        if(user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Account already exists, Please login'
+            })
+        }
+
         const newPerson = await userModel.create({
             name,
             email,
