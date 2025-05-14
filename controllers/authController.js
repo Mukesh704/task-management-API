@@ -1,4 +1,5 @@
 const userModel = require('../models/user');
+const { generateToken } = require('../middlewares/jwtMiddleware')
 
 async function registerController(req, res) {
     try {
@@ -25,10 +26,18 @@ async function registerController(req, res) {
             password
         });
 
+        const payload = {
+            id: newPerson.id,
+            email: newPerson.email
+        }
+
+        const token = generateToken(payload)
+
         if(newPerson) {
             res.status(200).json({
                 success: true,
-                message: 'User registered successfully!'
+                response: newPerson,
+                token: token
             })
         }
     } catch (err) {
