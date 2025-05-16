@@ -1,5 +1,5 @@
 const userModel = require('../models/user');
-const { generateToken } = require('../middlewares/jwtMiddleware')
+const { generateToken } = require('../middlewares/jwtMiddleware');
 
 async function registerController(req, res) {
     try {
@@ -49,7 +49,36 @@ async function registerController(req, res) {
     }
 };
 
-function loginController(req, res) {};
+async function loginController(req, res) {
+    try {
+        const {email, password} = req.body;
+        const user = await userModel.findOne({email: email});
+
+        if(!user || !user.comparePassword(password)) {
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid email or password'
+            })
+        }
+
+        const payload = {
+            id: user.id,
+            email: user.email
+        }
+
+        const token = generateToken(payload);
+        res.status(200).json({
+            success: true,
+            token: token
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        })
+    }
+};
 
 function profileController(req, res) {};
 
