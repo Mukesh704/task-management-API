@@ -83,7 +83,44 @@ async function getAllUsersTaskController(req, res) {
   }
 };
 
-function getSingleTaskController(req, res) {};
+async function getSingleTaskController(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const taskId = req.params.id;
+    const task = await taskModel.findById(taskId);
+
+    if(!task) {
+      return res.status(200).json({
+        success: false,
+        error: `Task doesn't exist`
+      })
+    }
+
+    // Checking if the task belongs to the user
+    if(task.user != userId) {
+      return res.status(404).json({
+        success: false,
+        error: 'Unauthorized'
+      })
+    }
+
+    // Hiding userId field from response
+    const taskObj = task.toObject();
+    delete taskObj.user;
+
+    res.status(200).json({
+      success: true,
+      response: taskObj
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+};
 
 function updateTaskController(req, res) {};
 
