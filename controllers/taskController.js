@@ -98,7 +98,7 @@ async function getSingleTaskController(req, res) {
     }
 
     // Checking if the task belongs to the user
-    if(task.user != userId) {
+    if(task.user.toString() !== userId) {
       return res.status(404).json({
         success: false,
         error: 'Unauthorized'
