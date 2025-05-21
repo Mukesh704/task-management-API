@@ -122,7 +122,46 @@ async function getSingleTaskController(req, res) {
   }
 };
 
-function updateTaskController(req, res) {};
+async function updateTaskController(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const taskId = req.params.id;
+    const task = await taskModel.findById(taskId);
+
+    const data = req.body;
+
+    if(!task) {
+      return res.status(404).jason({
+        success: false,
+        error: 'Task not found'
+      })
+    }
+
+    if(task.user.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: 'Unauthorized'
+      })
+    }
+
+    const response = await taskModel.findByIdAndUpdate(taskId, data, {
+      new: true,
+      runValidators: true
+    })
+
+    res.status(200).json({
+      success: true,
+      response
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+};
 
 function deleteTaskController(req, res) {};
 

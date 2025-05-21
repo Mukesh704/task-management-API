@@ -7,7 +7,7 @@ const { jwtMiddleware } = require('../middlewares/jwtMiddleware');
 router.post('/', jwtMiddleware, createTaskController);
 router.get('/', jwtMiddleware, getAllUsersTaskController);
 router.get('/:id', jwtMiddleware, getSingleTaskController);
-router.put('/:id', updateTaskController);
+router.put('/:id', jwtMiddleware, updateTaskController);
 router.delete('/:id', deleteTaskController);
 
 module.exports = router;
