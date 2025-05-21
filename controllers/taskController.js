@@ -163,7 +163,41 @@ async function updateTaskController(req, res) {
   }
 };
 
-function deleteTaskController(req, res) {};
+async function deleteTaskController(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const taskId = req.params.id;
+    const task = await taskModel.findById(taskId);
+
+    if(!task) {
+      return res.status(404).json({
+        success: false,
+        error: 'Task not found'
+      })
+    }
+
+    if(task.user.toString() !== userId) {
+      return res.status(403).json({
+        success: false,
+        error: 'Unauthorized access'
+      })
+    }
+
+    const result = await taskModel.findByIdAndDelete(taskId);
+
+    res.status(200).json({
+      success: true,
+      result
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      success: false,
+      error: 'Internal server error'
+    })
+  }
+};
 
 module.exports = {
     createTaskController,
