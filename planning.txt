@@ -94,3 +94,20 @@ User makes POST /tasks with token → creates a task
 User requests GET /tasks → sees all their tasks
 
 User updates/deletes task → only if it belongs to them
+
+----------------------------------------------------------------------------------------------------------------
+To Do (in future):
+----------------------------------------------------------------------------------------------------------------
+
+Bonus Functionalities You Can Add to Task Routes
+Feature	                        Where to Add	                        How it Helps
+Search by title	                GET /api/tasks?search=project	        Full-text or regex search in title
+Get stats (completed count)	    Custom route: /api/tasks/stats	        For charts/dashboards
+Archive/Trash support	        Add a isArchived: true field	        Soft delete without losing tasks
+Bulk delete	                    Accept multiple IDs in request body	    Clear multiple tasks at once
+Recurring task support	        Add recurring: 'weekly' field	        Set tasks to auto-repeat
+Tags/categories	                Add tags: [String] field	            Filter tasks by category
+Update Profile	                Add PATCH /api/auth/me                  to let users update name/avatar
+Change Password	                                                        
+Upload Profile Image	                                                Use Multer to upload and save img
+Delete Account	                Add DELETE /api/auth/me                 with confirmation

@@ -1,4 +1,5 @@
 const userModel = require('../models/user');
+const taskModel = require('../models/task');
 const { generateToken } = require('../middlewares/jwtMiddleware');
 
 async function registerController(req, res) {
@@ -80,7 +81,26 @@ async function loginController(req, res) {
     }
 };
 
-function profileController(req, res) {};
+async function profileController(req, res) {
+    try {
+        const userId = req.user.id;
+        const user = await userModel.findById(userId).select('-password -__v -updatedAt');
+
+        const taskCount = await taskModel.countDocuments({user: userId});
+
+        res.status(200).json({
+            success: true,
+            user,
+            taskCount
+        })
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        })
+    }
+};
 
 function logoutController(req, res) {};
 
